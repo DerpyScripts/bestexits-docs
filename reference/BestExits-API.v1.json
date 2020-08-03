@@ -1,0 +1,41 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BestExits API",
+    "version": "1.0",
+    "contact": {
+      "name": "Arturs Dobrecovs",
+      "email": "mail@arturs.site"
+    },
+    "description": "Predict the platform that a train will arrive at and the best part of the train to be on for a quicker exit or interchange."
+  },
+  "servers": [
+    {
+      "url": "https://arturs.site/apis/bestexits"
+    }
+  ],
+  "paths": {
+    "/platform/interchanges": {
+      "get": {
+        "summary": "Get best interchange locations",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-platform-interchanges",
+        "description": "Predict the best section of the train to be on for a faster interchange"
+      }
+    },
+    "/platform/exits": {
+      "get": {
+        "summary": "Predict the best section of the train to be on for a faster interchange",
+        "tags": [],
+        "responses": {},
+        "operationId": "get-platform-exits",
+        "description": "Predict the best section of the train to be on for a faster interchange"
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  }
+}
