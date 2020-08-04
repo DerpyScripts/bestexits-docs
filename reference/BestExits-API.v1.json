@@ -5,37 +5,186 @@
     "version": "1.0",
     "contact": {
       "name": "Arturs Dobrecovs",
-      "email": "mail@arturs.site"
+      "email": "mail@arturs.site",
+      "url": "https://arturs.site"
     },
     "description": "Predict the platform that a train will arrive at and the best part of the train to be on for a quicker exit or interchange."
   },
   "servers": [
     {
-      "url": "https://arturs.site/apis/bestexits"
+      "url": "https://arturs.site/apis/bestexits",
+      "description": "Production"
     }
   ],
   "paths": {
     "/platform/interchanges": {
       "get": {
-        "summary": "Get best interchange locations",
+        "summary": "Predict best interchanges",
         "tags": [],
-        "responses": {},
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
         "operationId": "get-platform-interchanges",
         "description": "Predict the best section of the train to be on for a faster interchange"
       }
     },
     "/platform/exits": {
       "get": {
-        "summary": "Predict the best section of the train to be on for a faster interchange",
+        "summary": "Predict best exits",
         "tags": [],
-        "responses": {},
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
         "operationId": "get-platform-exits",
         "description": "Predict the best section of the train to be on for a faster interchange"
+      }
+    },
+    "/platform/predict": {
+      "get": {
+        "summary": "Predict platform",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "True if operation was successful, false if an error occured"
+                    },
+                    "platforms": {
+                      "type": "array",
+                      "description": "Array of the platforms that the train may arrive at",
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "example": "2",
+                        "pattern": "^(\\d+)([a-z]?)$",
+                        "minLength": 1
+                      }
+                    },
+                    "direction": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Direction that the platform is facing. May be null if trains travel in both directions from this platform.",
+                      "example": "eastbound",
+                      "enum": [
+                        "northbound",
+                        "eastbound",
+                        "southbound",
+                        "westbound"
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "From 940GZZLUGHK (Goldhawk Road) to 940GZZLUHSC (Hammersmith H&C/Circle)": {
+                    "value": {
+                      "success": true,
+                      "platforms": [
+                        "1",
+                        "2",
+                        "3"
+                      ],
+                      "direction": "eastbound"
+                    }
+                  },
+                  "From 940GZZLUPVL (Perivale) to 940GZZLUGFD (Greenford)": {
+                    "value": {
+                      "success": true,
+                      "platforms": [
+                        "2"
+                      ],
+                      "direction": "westbound"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "True if operation was successful, false if an error occured"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message that briefly describes the issue with your request",
+                      "example": "Invalid station_id"
+                    }
+                  }
+                },
+                "examples": {
+                  "From 940GZZLUBAN (Bank) to 940GZZLUHBN (Holborn)": {
+                    "value": {
+                      "success": false,
+                      "error": "Invalid previous_id"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-platform-predict",
+        "description": "Predict the platform number and direction of the platform that a train may arrive at",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUGFD"
+            },
+            "in": "query",
+            "name": "station_id",
+            "description": "The unique NAPTAN identifier of the destination station",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUPVL"
+            },
+            "in": "query",
+            "name": "previous_id",
+            "description": "The unique NAPTAN identifier of the station just before the destination along the train's route",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "line",
+            "description": "The tube/rail line that the user is travelling on between these 2 stations"
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {},
-    "securitySchemes": {}
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "API key",
+        "description": "Requests without a valid API key are restricted to 20 requests per rolling hour period."
+      }
+    }
   }
 }
