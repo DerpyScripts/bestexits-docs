@@ -22,11 +22,160 @@
         "tags": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "True if operation was successful, false if an error occured."
+                    },
+                    "platform": {
+                      "type": [
+                        "array",
+                        "string"
+                      ],
+                      "example": "1",
+                      "description": "The platform that the train is predicted to arrive at. If it may stop at more than one platform, this value will be an array containing all of them.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "direction": {
+                      "type": "string",
+                      "description": "The direction of the platform that the train will arrive at.",
+                      "enum": [
+                        "northbound",
+                        "eastbound",
+                        "southbound",
+                        "westbound"
+                      ],
+                      "example": "eastbound"
+                    },
+                    "side": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Side of the train that the doors will open on. This may be null if the platform could not be accurately predicted.",
+                      "enum": [
+                        "left",
+                        "right",
+                        "both"
+                      ],
+                      "example": "right"
+                    },
+                    "interchanges": {
+                      "description": "Array of interchanges off the platform.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Interchange"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "success": true,
+                      "platform": 1,
+                      "direction": "westbound",
+                      "side": "right",
+                      "interchanges": [
+                        {
+                          "interchange": {
+                            "lines": [
+                              "great-western-railway"
+                            ],
+                            "direction": "southbound"
+                          },
+                          "sections": [
+                            "middle",
+                            "back"
+                          ],
+                          "carriage": null,
+                          "door": null
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "True if operation was successful, false if an error occured."
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid station_id",
+                      "description": "Error message that briefly describes the issue with your request."
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "success": false,
+                      "error": "Invalid previous_id"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "operationId": "get-platform-interchanges",
-        "description": "Predict the best section of the train to be on for a faster interchange."
+        "description": "Predict the best section of the train to be on for a faster interchange.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUGFD"
+            },
+            "in": "query",
+            "description": "The unique NAPTAN identifier of the destination station.",
+            "name": "station_id",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "1"
+            },
+            "in": "query",
+            "name": "platform_no",
+            "description": "The number of the platform that the train will arrive at when it reaches the destination. Mutually exclusive with `previous_id`."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUVL"
+            },
+            "in": "query",
+            "name": "previous_id",
+            "description": "The unique NAPTAN identifier of the station just before the destination along the train's route. Mutually exclusive with `platform_no`."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "central"
+            },
+            "in": "query",
+            "name": "line",
+            "description": "The tube/rail line that the journey is being made on. See the \"Possible line IDs\" document for examples of these."
+          }
+        ]
       }
     },
     "/platform/exits": {
@@ -84,7 +233,7 @@
                       "type": "array",
                       "description": "Array of exits off the platform.",
                       "items": {
-                        "$ref": ""
+                        "$ref": "#/components/schemas/Exit"
                       }
                     }
                   }
