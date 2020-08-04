@@ -1,4 +1,4 @@
-# BestExits
+# Overview
 
 BestExits is an API that allows you to predict what platform a train will arrive at, as well as the best parts of the train to be on for a quicker interchange or exit.
 
@@ -8,7 +8,7 @@ You can find an example of the API in action [on this website](https://bestexits
 > ### Data not complete
 > Please note that I am still working on collecting all the data necessary for this project, and so not all stations are supported by the API at the moment.
 >
-> You can keep up with my progress on collecting data by visiting the [Progress page](2.-Progress.md).
+> You can keep up with my progress on collecting data by visiting the [Progress page](2-progress.md).
 
 > Please note that the API will only support stations on the London Underground and other TfL services at first.
 > 

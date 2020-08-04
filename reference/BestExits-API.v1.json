@@ -12,8 +12,7 @@
   },
   "servers": [
     {
-      "url": "https://arturs.site/apis/bestexits",
-      "description": "Production"
+      "url": "https://arturs.site/apis/bestexits"
     }
   ],
   "paths": {
@@ -36,11 +35,154 @@
         "tags": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "True if operation was successful, false if an error occured."
+                    },
+                    "platform": {
+                      "type": [
+                        "array",
+                        "string"
+                      ],
+                      "example": "1",
+                      "description": "The platform that the train is predicted to arrive at. If it may stop at more than one platform, this value will be an array containing all of them.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "direction": {
+                      "type": "string",
+                      "enum": [
+                        "northbound",
+                        "eastbound",
+                        "southbound",
+                        "westbound"
+                      ],
+                      "example": "eastbound",
+                      "description": "The direction of the platform that the train will arrive at."
+                    },
+                    "side": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "left",
+                        "right",
+                        "both"
+                      ],
+                      "example": "right",
+                      "description": "Side of the train that the doors will open on. This may be null if the platform could not be accurately predicted."
+                    },
+                    "exits": {
+                      "type": "array",
+                      "description": "Array of exits off the platform.",
+                      "items": {
+                        "$ref": ""
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "success": true,
+                      "platform": 1,
+                      "direction": "westbound",
+                      "side": "right",
+                      "exits": [
+                        {
+                          "name": "Oldfield Lane South",
+                          "sections": [
+                            "front"
+                          ],
+                          "carriage": 1,
+                          "door": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "True if operation was successful, false if an error occured."
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message that briefly describes the issue with your request.",
+                      "example": "Invalid station_id"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "value": {
+                      "success": false,
+                      "error": "Invalid previous_id"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "operationId": "get-platform-exits",
-        "description": "Predict the best section of the train to be on for a faster interchange"
+        "description": "Predict the best section of the train to be on for a faster interchange",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUGFD"
+            },
+            "in": "query",
+            "name": "station_id",
+            "required": true,
+            "description": "The unique NAPTAN identifier of the destination station."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "1"
+            },
+            "in": "query",
+            "name": "platform_no",
+            "description": "The number of the platform that the train will arrive at when it reaches the destination. Mutually exclusive with `previous_id`."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUVL"
+            },
+            "in": "query",
+            "name": "previous_id",
+            "description": "The unique NAPTAN identifier of the station just before the destination along the train's route. Mutually exclusive with `platform_no`."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "central"
+            },
+            "in": "query",
+            "name": "line",
+            "description": "The tube/rail line that the journey is being made on. See the \"Possible line IDs\" document for examples of these."
+          }
+        ]
       }
     },
     "/platform/predict": {
@@ -57,7 +199,7 @@
                   "properties": {
                     "success": {
                       "type": "boolean",
-                      "description": "True if operation was successful, false if an error occured"
+                      "description": "True if operation was successful, false if an error occured."
                     },
                     "platforms": {
                       "type": "array",
@@ -66,8 +208,7 @@
                       "items": {
                         "type": "string",
                         "example": "2",
-                        "pattern": "^(\\d+)([a-z]?)$",
-                        "minLength": 1
+                        "pattern": "^(\\d+)([a-z]?)$"
                       }
                     },
                     "direction": {
@@ -87,7 +228,7 @@
                   }
                 },
                 "examples": {
-                  "From 940GZZLUGHK (Goldhawk Road) to 940GZZLUHSC (Hammersmith H&C/Circle)": {
+                  "Example": {
                     "value": {
                       "success": true,
                       "platforms": [
@@ -96,15 +237,6 @@
                         "3"
                       ],
                       "direction": "eastbound"
-                    }
-                  },
-                  "From 940GZZLUPVL (Perivale) to 940GZZLUGFD (Greenford)": {
-                    "value": {
-                      "success": true,
-                      "platforms": [
-                        "2"
-                      ],
-                      "direction": "westbound"
                     }
                   }
                 }
@@ -120,17 +252,17 @@
                   "properties": {
                     "success": {
                       "type": "boolean",
-                      "description": "True if operation was successful, false if an error occured"
+                      "description": "True if operation was successful, false if an error occured."
                     },
                     "error": {
                       "type": "string",
-                      "description": "Error message that briefly describes the issue with your request",
+                      "description": "Error message that briefly describes the issue with your request.",
                       "example": "Invalid station_id"
                     }
                   }
                 },
                 "examples": {
-                  "From 940GZZLUBAN (Bank) to 940GZZLUHBN (Holborn)": {
+                  "Example": {
                     "value": {
                       "success": false,
                       "error": "Invalid previous_id"
@@ -151,7 +283,7 @@
             },
             "in": "query",
             "name": "station_id",
-            "description": "The unique NAPTAN identifier of the destination station",
+            "description": "The unique NAPTAN identifier of the destination station.",
             "required": true
           },
           {
@@ -161,7 +293,7 @@
             },
             "in": "query",
             "name": "previous_id",
-            "description": "The unique NAPTAN identifier of the station just before the destination along the train's route",
+            "description": "The unique NAPTAN identifier of the station just before the destination along the train's route.",
             "required": true
           },
           {
@@ -175,14 +307,146 @@
             },
             "in": "query",
             "name": "line",
-            "description": "The tube/rail line that the journey between these 2 stations is being made on"
+            "description": "The tube/rail line that the journey between these 2 stations is being made on. See the \"Possible line IDs\" document for examples of these."
           }
         ]
       }
     }
   },
   "components": {
-    "schemas": {},
+    "schemas": {
+      "Exit": {
+        "title": "Exit",
+        "type": "object",
+        "description": "Objects returned by the /platform/exits endpoint",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Oxford Street / Regent Street",
+            "description": "The name of the exit. Usually based on street names but may include landmarks. If there are multiple names, they will be separated by forward slashes."
+          },
+          "sections": {
+            "type": "array",
+            "description": "Best part of the train to be on for this exit. Array may be empty if the platform could not be correctly predicted.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "front",
+                "middle",
+                "back"
+              ],
+              "example": "middle"
+            }
+          },
+          "carriage": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "example": 2,
+            "description": "Best carriage of the train to be on for this exit. May be null if the platform could not be correctly predicted or if the exit is very wide."
+          },
+          "door": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "example": 3,
+            "description": "Best door of this carriage to be standing at for this exit. May be null if the platform could not be correctly predicted or if the exit is very wide."
+          }
+        },
+        "x-examples": {
+          "Example": {
+            "name": "Oldfield Lane South",
+            "sections": [
+              "front"
+            ],
+            "carriage": 1,
+            "door": 1
+          }
+        }
+      },
+      "Interchange": {
+        "title": "Interchange",
+        "type": "object",
+        "description": "Objects returned by the /platform/interchanges endpoint",
+        "properties": {
+          "interchange": {
+            "type": "object",
+            "description": "Information about what platforms this interchange leads to",
+            "properties": {
+              "lines": {
+                "type": "array",
+                "description": "The tube/rail lines that this interchange leads to. See the \"Possible line IDs\" document for examples of these.",
+                "items": {
+                  "type": "string",
+                  "example": "central"
+                }
+              },
+              "direction": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "example": "eastbound",
+                "description": "Directions of the platform(s) that this train leads to. If there are multiple platforms with different directions, this value will be null.",
+                "enum": [
+                  "northbound",
+                  "eastbound",
+                  "southbound",
+                  "westbound"
+                ]
+              }
+            }
+          },
+          "sections": {
+            "type": "array",
+            "description": "Best part of the train to be on for this exit. Array may be empty if the platform could not be correctly predicted.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "front",
+                "middle",
+                "back"
+              ],
+              "example": "middle"
+            }
+          },
+          "carriage": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Best carriage of the train to be on for this exit. May be null if the platform could not be correctly predicted or if the exit is very wide.",
+            "example": 2
+          },
+          "door": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Best door of this carriage to be standing at for this exit. May be null if the platform could not be correctly predicted or if the exit is very wide.",
+            "example": 3
+          }
+        },
+        "x-examples": {
+          "Example": {
+            "interchange": {
+              "lines": [
+                "great-western-railway"
+              ],
+              "direction": "southbound"
+            },
+            "sections": [
+              "middle",
+              "back"
+            ],
+            "carriage": null,
+            "door": null
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "api_key": {
         "type": "apiKey",
