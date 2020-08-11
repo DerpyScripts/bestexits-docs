@@ -80,7 +80,7 @@
                   "Example": {
                     "value": {
                       "success": true,
-                      "platform": 1,
+                      "platform": "1",
                       "direction": "westbound",
                       "side": "right",
                       "interchanges": [
@@ -242,7 +242,7 @@
                   "Example": {
                     "value": {
                       "success": true,
-                      "platform": 1,
+                      "platform": "1",
                       "direction": "westbound",
                       "side": "right",
                       "exits": [
@@ -451,7 +451,6 @@
           {
             "schema": {
               "type": "string",
-              "pattern": "^[a-z\\-]+$",
               "example": "central"
             },
             "in": "query",
