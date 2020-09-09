@@ -183,7 +183,7 @@
             },
             "in": "query",
             "name": "line",
-            "description": "The tube/rail line that the journey is being made on. See the \"Possible line IDs\" document for examples of these."
+            "description": "The tube/rail line that the journey is being made on. See the \"Supported line IDs\" document for examples of these."
           }
         ]
       }
@@ -349,7 +349,7 @@
             },
             "in": "query",
             "name": "line",
-            "description": "The tube/rail line that the journey is being made on. See the \"Possible line IDs\" document for examples of these."
+            "description": "The tube/rail line that the journey is being made on. See the \"Supported line IDs\" document for examples of these."
           }
         ]
       }
@@ -482,7 +482,7 @@
             },
             "in": "query",
             "name": "line",
-            "description": "The tube/rail line that the journey between these 2 stations is being made on. See the \"Possible line IDs\" document for examples of these."
+            "description": "The tube/rail line that the journey between these 2 stations is being made on. See the \"Supported line IDs\" document for examples of these."
           }
         ]
       }
@@ -493,7 +493,7 @@
       "Exit": {
         "title": "Exit",
         "type": "object",
-        "description": "Objects returned by the /platform/exits endpoint",
+        "description": "Object returned by the /platform/exits endpoint",
         "x-examples": {
           "Example": {
             "name": "Oldfield Lane South",
@@ -552,7 +552,7 @@
       "Interchange": {
         "title": "Interchange",
         "type": "object",
-        "description": "Objects returned by the /platform/interchanges endpoint",
+        "description": "Object returned by the /platform/interchanges endpoint",
         "x-examples": {
           "Example": {
             "interchange": {

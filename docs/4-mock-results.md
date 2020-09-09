@@ -52,7 +52,8 @@ lineNumbers: true
         "middle"
       ],
       "carriage": 4,
-      "door": 2
+      "door": 2,
+      "notices": []
     }
   ]
 }
@@ -83,7 +84,8 @@ lineNumbers: true
         "front"
       ],
       "carriage": 1,
-      "door": 1
+      "door": 1,
+      "notices": []
     }
   ]
 }

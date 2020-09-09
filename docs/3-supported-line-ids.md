@@ -1,4 +1,4 @@
-# Possible line IDs
+# Supported line IDs
 
 Below I have listed all the valid tube/train line IDs that are supported by the BestExits API. All IDs are the same as those used by the official TfL Open API, for better compatibility.
 
