@@ -14,6 +14,7 @@ Please note that certain restrictions are in place for mock requests, as outline
 | ------------ | ------------- |
 | station_id   | 940GZZLUOXC   |
 | previous_id  | 940GZZLUTCR   |
+| terminal_id  | 940GZZLUWRP   |
 | line         | central       |
 
 ## Responses

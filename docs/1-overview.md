@@ -12,7 +12,7 @@ You can find an example of the API in action [on this website](https://bestexits
 
 > Please note that the API will only support stations on the London Underground and other TfL services at first.
 > 
-> Support for most National Rail stations in the London Oyster zone should be out relatively soon, but stations outside of this zone are unlikely to be anywhere in the near future.
+> Support for most National Rail stations in the London Oyster zone will follow soon. They will however only return the best section, not carriages and doors, as stopping points for trains of different lengths are usually staggered.
 
 If you have any questions regarding the API or the project in general please do not hesitate to contact me by sending me a message on Twitter [@DerpyScripts](https://twitter.com/DerpyScripts) or sending me an email to [mail@arturs.site](mailto:mail@arturs.site). I look forward to hearing from you!
 

@@ -96,7 +96,8 @@
                             "back"
                           ],
                           "carriage": null,
-                          "door": null
+                          "door": null,
+                          "notices": []
                         }
                       ]
                     }
@@ -160,11 +161,20 @@
           {
             "schema": {
               "type": "string",
-              "example": "940GZZLUVL"
+              "example": "940GZZLUPVL"
             },
             "in": "query",
             "name": "previous_id",
             "description": "The unique NAPTAN identifier of the station just before the destination along the train's route. Mutually exclusive with `platform_no`."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUWRP"
+            },
+            "in": "query",
+            "name": "terminal_id",
+            "description": "The unique NAPTAN identifier of the station where the train terminates."
           },
           {
             "schema": {
@@ -252,7 +262,8 @@
                             "front"
                           ],
                           "carriage": 1,
-                          "door": 1
+                          "door": 1,
+                          "notices": []
                         }
                       ]
                     }
@@ -316,11 +327,20 @@
           {
             "schema": {
               "type": "string",
-              "example": "940GZZLUVL"
+              "example": "940GZZLUPVL"
             },
             "in": "query",
             "name": "previous_id",
             "description": "The unique NAPTAN identifier of the station just before the destination along the train's route. Mutually exclusive with `platform_no`."
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "940GZZLUWRP"
+            },
+            "in": "query",
+            "name": "terminal_id",
+            "description": "The unique NAPTAN identifier of the station where the train terminates."
           },
           {
             "schema": {
@@ -381,11 +401,9 @@
                     "value": {
                       "success": true,
                       "platforms": [
-                        "1",
-                        "2",
-                        "3"
+                        "1"
                       ],
-                      "direction": "eastbound"
+                      "direction": "westbound"
                     }
                   }
                 }
@@ -451,6 +469,15 @@
           {
             "schema": {
               "type": "string",
+              "example": "940GZZLUWRP"
+            },
+            "in": "query",
+            "name": "terminal_id",
+            "description": "The unique NAPTAN identifier of the station where the train terminates."
+          },
+          {
+            "schema": {
+              "type": "string",
               "example": "central"
             },
             "in": "query",
@@ -467,6 +494,17 @@
         "title": "Exit",
         "type": "object",
         "description": "Objects returned by the /platform/exits endpoint",
+        "x-examples": {
+          "Example": {
+            "name": "Oldfield Lane South",
+            "sections": [
+              "front"
+            ],
+            "carriage": 1,
+            "door": 1,
+            "notices": []
+          }
+        },
         "properties": {
           "name": {
             "type": "string",
@@ -501,16 +539,13 @@
             ],
             "example": 3,
             "description": "Best door of this carriage to be standing at for this exit. May be null if the platform could not be correctly predicted or if the exit is very wide."
-          }
-        },
-        "x-examples": {
-          "Example": {
-            "name": "Oldfield Lane South",
-            "sections": [
-              "front"
-            ],
-            "carriage": 1,
-            "door": 1
+          },
+          "notices": {
+            "type": "array",
+            "description": "List of notices/warnings that should be displayed to the user with the rest of the information.",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -518,6 +553,23 @@
         "title": "Interchange",
         "type": "object",
         "description": "Objects returned by the /platform/interchanges endpoint",
+        "x-examples": {
+          "Example": {
+            "interchange": {
+              "lines": [
+                "great-western-railway"
+              ],
+              "direction": "southbound"
+            },
+            "sections": [
+              "middle",
+              "back"
+            ],
+            "carriage": null,
+            "door": null,
+            "notices": []
+          }
+        },
         "properties": {
           "interchange": {
             "type": "object",
@@ -575,22 +627,13 @@
             ],
             "description": "Best door of this carriage to be standing at for this exit. May be null if the platform could not be correctly predicted or if the exit is very wide.",
             "example": 3
-          }
-        },
-        "x-examples": {
-          "Example": {
-            "interchange": {
-              "lines": [
-                "great-western-railway"
-              ],
-              "direction": "southbound"
-            },
-            "sections": [
-              "middle",
-              "back"
-            ],
-            "carriage": null,
-            "door": null
+          },
+          "notices": {
+            "type": "array",
+            "description": "List of notices/warnings that should be displayed to the user with the rest of the information.",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }
